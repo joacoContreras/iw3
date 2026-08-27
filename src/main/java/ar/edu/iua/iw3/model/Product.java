@@ -34,7 +34,6 @@ public class Product {
     // Imprimir objeto de manera legible en consola
     @Override
     public String toString() {
-        return String.format("id=%s product=%s  price=%s stock=%s", this.getId(), this.getProduct(), this.getPrice(),
-                this.isStock());
+        return String.format("id=%s product=%s  price=%s stock=%s", this.getId(), this.getProduct(), this.getPrice(), this.isStock());
     }
 }

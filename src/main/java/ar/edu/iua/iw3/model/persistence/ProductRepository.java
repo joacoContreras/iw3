@@ -7,5 +7,5 @@ import ar.edu.iua.iw3.model.Product;
 
 @Repository // Inyecta funcionalidades
 public interface ProductRepository extends JpaRepository<Product, Long> {
-
+    
 }

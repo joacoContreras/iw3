@@ -11,13 +11,13 @@ public class BusinessException extends Exception{
     }
 
     @Builder
-    public BusinessException(Throwable cause) {
-        super(cause);
+    public BusinessException(Throwable ex) {
+        super(ex);
     }
 
     @Builder
-    public BusinessException(String message, Throwable cause) {
-        super(message, cause);
+    public BusinessException(String message, Throwable ex) {
+        super(message, ex);
     }
     
 }

@@ -9,21 +9,22 @@ import org.springframework.stereotype.Service;
 import ar.edu.iua.iw3.business.exception.BusinessException;
 import ar.edu.iua.iw3.business.exception.FoundException;
 import ar.edu.iua.iw3.business.exception.NotFoundException;
-import ar.edu.iua.iw3.model.Product;
-import ar.edu.iua.iw3.model.persistence.ProductRepository;
+import ar.edu.iua.iw3.model.Category;
+import ar.edu.iua.iw3.model.persistence.CategoryRepository;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
-public class ProductBusiness implements IProductBusiness {
-    
+public class CategoryBusiness implements ICategoryBusiness {
+
+    // IoC
     @Autowired
-    private ProductRepository productDAO;
+    private CategoryRepository categoryDAO;
 
     @Override
-    public List<Product> list() throws BusinessException {
+    public List<Category> list() throws BusinessException {
         try {
-            return productDAO.findAll();
+            return categoryDAO.findAll();
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw BusinessException.builder().ex(e).build();
@@ -31,54 +32,53 @@ public class ProductBusiness implements IProductBusiness {
     }
 
     @Override
-    public Product load(Long id) throws NotFoundException, BusinessException {
+    public Category load(Long id) throws NotFoundException, BusinessException {
         if (id == null) {
-            throw NotFoundException.builder().message("No se encuentra el Producto id=null").build();
+            throw NotFoundException.builder().message("No se encuentra la Categoría id=null").build();
         }
-        Optional<Product> r;
+        Optional<Category> r;
         try {
-            r = productDAO.findById(id);
+            r = categoryDAO.findById(id);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw BusinessException.builder().ex(e).build();
         }
         if (r.isEmpty()) {
-            throw NotFoundException.builder().message("No se encuentra el Producto id=" + id).build();
+            throw NotFoundException.builder().message("No se encuentra la Categoría id=" + id).build();
         }
         return r.get();
     }
 
     @Override
-    public Product load(String product) throws NotFoundException, BusinessException {
-        Optional<Product> r;
+    public Category load(String category) throws NotFoundException, BusinessException {
+        Optional<Category> r;
         try {
-            r = productDAO.findByProduct(product);
+            r = categoryDAO.findByCategory(category);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw BusinessException.builder().ex(e).build();
         }
         if (r.isEmpty()) {
-            throw NotFoundException.builder().message("No se encuentra el Producto '" + product + "'").build();
+            throw NotFoundException.builder().message("No se encuentra la Categoría '" + category + "'").build();
         }
         return r.get();
-
     }
 
     @Override
-    public Product add(Product product) throws FoundException, BusinessException {
+    public Category add(Category category) throws FoundException, BusinessException {
         try {
-            load(product.getId());
-            throw FoundException.builder().message("Se encuentró el Producto id=" + product.getId()).build();
+            load(category.getId());
+            throw FoundException.builder().message("Se encontró la Categoría id=" + category.getId()).build();
         } catch (NotFoundException e) {
         }
         try {
-            load(product.getProduct());
-            throw FoundException.builder().message("Se encuentró el Producto '" + product.getProduct() + "'").build();
+            load(category.getCategory());
+            throw FoundException.builder().message("Se encontró la Categoría '" + category.getCategory() + "'").build();
         } catch (NotFoundException e) {
         }
 
         try {
-            return productDAO.save(product);
+            return categoryDAO.save(category);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw BusinessException.builder().ex(e).build();
@@ -86,10 +86,10 @@ public class ProductBusiness implements IProductBusiness {
     }
 
     @Override
-    public Product update(Product product) throws NotFoundException, BusinessException {
-        load(product.getId());
+    public Category update(Category category) throws NotFoundException, BusinessException {
+        load(category.getId());
         try {
-            return productDAO.save(product);
+            return categoryDAO.save(category);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw BusinessException.builder().ex(e).build();
@@ -100,11 +100,10 @@ public class ProductBusiness implements IProductBusiness {
     public void delete(long id) throws NotFoundException, BusinessException {
         load(id);
         try {
-            productDAO.deleteById(id);
+            categoryDAO.deleteById(id);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw BusinessException.builder().ex(e).build();
         }
     }
-
 }
